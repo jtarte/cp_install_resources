@@ -1,0 +1,109 @@
+apiVersion: ta.ibm.com/v1
+kind: TransAdv
+metadata:
+  name: ta
+  namespace: ta
+  labels:
+    app.kubernetes.io/instance: ta-instance
+    app.kubernetes.io/name: ta-operator
+    release: operator
+spec:
+  networkPolicy:
+    enabled: true
+  license:
+    accept: true
+  nodePortConfig:
+    libertyPort: ''
+    routerNodeIp: ''
+    uiPort: ''
+  fips:
+    enabled: false
+  route:
+    enabled: true
+    hostname: ta.apps.moplab5.10.3.66.50.nip.io
+    rateLimit:
+      enabled: true
+      rateHttp: '200'
+      rateTcp: '200'
+  transadv:
+    imagePullSecret: ta-pull-secret
+    livenessProbe:
+      failureThreshold: 15
+      initialDelaySeconds: 60
+      periodSeconds: 5
+      timeoutSeconds: 30
+    logLevel: info
+    publicUrl: 'https://ta.apps.moplab5.10.3.66.50.nip.io'
+    readinessProbe:
+      failureThreshold: 15
+      initialDelaySeconds: 60
+      periodSeconds: 5
+      timeoutSeconds: 30
+    resources:
+      limits:
+        cpu: 16000m
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+  couchdb:
+    imagePullSecret: ta-pull-secret
+    livenessProbe:
+      failureThreshold: 6
+      initialDelaySeconds: 60
+      periodSeconds: 5
+      timeoutSeconds: 3
+    persistence:
+      accessMode: ReadWriteMany
+      enabled: true
+      existingClaim: ''
+      size: 8Gi
+      storageClassName: 'nfs-storage-provisioner'
+      supplementalGroups: []
+      useDynamicProvisioning: true
+    readinessProbe:
+      failureThreshold: 6
+      initialDelaySeconds: 5
+      periodSeconds: 5
+      timeoutSeconds: 3
+    resources:
+      limits:
+        cpu: 16000m
+        memory: 8Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+  authentication:
+    disabled:
+      liberty: false
+      ui: false
+    ocp:
+      apiEndpoint: 'https://api.moplab5.10.3.66.50.nip.io:6443'
+      authIssuerEndpoint: 'https://oauth-openshift.apps.moplab5.10.3.66.50.nip.io'
+      secretName: transformation-advisor-secret
+    oidc:
+      clientId: ta-ui
+  tls:
+    caCert: ''
+    enabled: true
+  transadvui:
+    imagePullSecret: ta-pull-secret
+    livenessProbe:
+      failureThreshold: 15
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      timeoutSeconds: 5
+    logLevel: info
+    readinessProbe:
+      failureThreshold: 15
+      initialDelaySeconds: 5
+      periodSeconds: 30
+      timeoutSeconds: 5
+    resources:
+      limits:
+        cpu: 16000m
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+    useSecureCookie: 'true'
