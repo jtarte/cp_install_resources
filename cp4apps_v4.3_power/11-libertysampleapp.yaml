@@ -1,0 +1,14 @@
+apiVersion: openliberty.io/v1beta1
+kind: OpenLibertyApplication
+metadata:
+  name: mod-resort
+spec:
+  applicationImage: jtarte/liberty-modresort
+  applicationName: mod-resort
+  expose: true
+  pullPolicy: IfNotPresent
+  replicas: 1
+  resourceConstraints: {}
+  service:
+    port: 9080
+    type: ClusterIP 
