@@ -1,8 +1,21 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: openshift-local-storage
+spec: {}
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: local-operator-group
+  namespace: openshift-local-storage
+spec:
+  targetNamespaces:
+  - openshift-local-storage
+---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  labels:
-    operators.coreos.com/local-storage-operator.openshift-local-storage: ""
   name: local-storage-operator
   namespace: openshift-local-storage
 spec:
@@ -11,4 +24,3 @@ spec:
   name: local-storage-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: local-storage-operator.4.6.0-202103202154.p0
